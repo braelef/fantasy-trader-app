@@ -1976,8 +1976,8 @@ He walks to the fallen horse and cuts the traces with one stroke, and once the a
 ]
 [[We won.-&gt;Fight won]]
 [[Every hero fell.-&gt;Run lost]]</tw-passagedata><tw-passagedata pid="162" name="Fight won" tags="AI" position="600,-100" size="100,100">//''Victory''//
-
-(text-colour:cyan)[Each hero gains (print: $foes + (cond: $mod is &quot;&quot;, 0, 1)) XP.]
+(set: _fxp to (ceil: ($foes + (cond: $mod is &quot;&quot;, 0, 1)) * (cond: $section is &quot;Deadlands&quot;, 2, $section is &quot;Forest&quot;, 1.5, 1)))
+(text-colour:cyan)[Each hero gains _fxp XP.(if: $section is &quot;Deadlands&quot;)[ Deadlands bonus: double XP.](else-if: $section is &quot;Forest&quot;)[ Forest bonus: XP × 1.5, rounded up.]]
 (if: $foes &gt; 1)[(text-colour:yellow)[Each hero gains (print: $foes - 1) gold.]
 ](if: $arenaSupport is true)[(text-colour:yellow)[The Arena Announcer's support pays the party 2 gold.]
 ](text-colour:green)[Collect each defeated enemy's printed drop.]
@@ -1987,7 +1987,7 @@ How many heroes fell in the fight?
 (link: &quot;Everyone is standing. (End your turn.)&quot;)[(go-to: &quot;Main&quot;)]
 (link: &quot;One hero fell. (Doom +1. End your turn.)&quot;)[(set: $doom to it + 1)(go-to: &quot;Main&quot;)]
 (if: $heroes &gt;= 3)[(link: &quot;Two heroes fell. (Doom +2. End your turn.)&quot;)[(set: $doom to it + 2)(go-to: &quot;Main&quot;)]]
-(if: $heroes &gt;= 4)[(link: &quot;Three heroes fell. (Doom +3. End your turn.)&quot;)[(set: $doom to it + 3)(go-to: &quot;Main&quot;)]](set: $xp to it + $foes + (cond: $mod is &quot;&quot;, 0, 1), $gold to it + ($foes - 1) * $heroes)(if: $arenaSupport is true)[(set: $gold to it + 2)]</tw-passagedata><tw-passagedata pid="163" name="Elite fight" tags="AI" position="750,-250" size="100,100">//''Elite''//
+(if: $heroes &gt;= 4)[(link: &quot;Three heroes fell. (Doom +3. End your turn.)&quot;)[(set: $doom to it + 3)(go-to: &quot;Main&quot;)]](set: $xp to it + _fxp, $gold to it + ($foes - 1) * $heroes)(if: $arenaSupport is true)[(set: $gold to it + 2)]</tw-passagedata><tw-passagedata pid="163" name="Elite fight" tags="AI" position="750,-250" size="100,100">//''Elite''//
 &lt;div class=&quot;art art-elite&quot;&gt;&lt;/div&gt;
 (text-colour:purple)[Doom has reached a threshold. Draw the top card of the $section elite deck and fight it.]
 (if: $heroes is 4)[(text-colour:purple)[Four heroes: also draw 1 enemy from the $section enemy deck. It fights beside the elite, acts after it, and pays its printed drop.]
@@ -1999,6 +1999,9 @@ How many heroes fell in the fight?
 [[Every hero fell.-&gt;Run lost]]</tw-passagedata><tw-passagedata pid="164" name="Elite won" tags="AI" position="750,-100" size="100,100">//''Victory''//
 
 (text-colour:green)[Collect the elite's printed rewards(if: $heroes is 4)[, and the add-on's printed drop].]
+(if: $section is &quot;Deadlands&quot;)[(text-colour:cyan)[Deadlands: each hero gains double the printed XP.]
+](else-if: $section is &quot;Forest&quot;)[(text-colour:cyan)[Forest: each hero gains 1.5 × the printed XP, rounded up.]
+]
 (text-colour:magenta)[Doom +1 for each hero who fell.]
 
 How many heroes fell in the fight?
